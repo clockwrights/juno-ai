@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:embed-response",
+  "title": "gate-model embed response",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "trace_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "trace_id": {
+      "type": "string"
+    },
+    "embeddings": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      }
+    },
+    "model": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dimension": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "gateway": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "error": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "message"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "budget_exhausted",
+            "role_not_allowed",
+            "upstream_error",
+            "invalid_request"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "retry_after_seconds": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

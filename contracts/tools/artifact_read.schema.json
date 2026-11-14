@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:tools:artifact_read",
+  "title": "tool artifact_read",
+  "$defs": {
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "content",
+        "etag"
+      ],
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "etag": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

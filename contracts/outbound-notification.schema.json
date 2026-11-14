@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:outbound-notification",
+  "title": "outbound-notifications body",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "trace_id",
+    "stage",
+    "issued_at",
+    "kind",
+    "priority",
+    "text",
+    "source"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stage": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]{1,24}$"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "kind": {
+      "const": "notify"
+    },
+    "priority": {
+      "enum": [
+        "low",
+        "normal",
+        "urgent"
+      ]
+    },
+    "text": {
+      "type": "string",
+      "maxLength": 4000
+    },
+    "source": {
+      "enum": [
+        "conversation",
+        "heartbeat"
+      ]
+    }
+  }
+}

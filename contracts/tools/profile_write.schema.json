@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:tools:profile_write",
+  "title": "tool profile_write",
+  "$defs": {
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "content",
+        "etag"
+      ],
+      "properties": {
+        "content": {
+          "type": "string",
+          "maxLength": 32768
+        },
+        "etag": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "etag"
+          ],
+          "properties": {
+            "etag": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "error",
+            "current_etag",
+            "content"
+          ],
+          "properties": {
+            "error": {
+              "const": "conflict"
+            },
+            "current_etag": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

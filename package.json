@@ -1,0 +1,8 @@
+{
+  "name": "juno-infra",
+  "private": true,
+  "description": "Pins the CDK CLI so local synth and CI use the same version.",
+  "devDependencies": {
+    "aws-cdk": "2.1140.0"
+  }
+}

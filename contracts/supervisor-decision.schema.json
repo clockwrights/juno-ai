@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:supervisor-decision",
+  "title": "supervisor structured decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "level",
+    "action",
+    "summary",
+    "probable_cause"
+  ],
+  "properties": {
+    "level": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2
+    },
+    "action": {
+      "enum": [
+        "log",
+        "notify",
+        "pause"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "probable_cause": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  }
+}

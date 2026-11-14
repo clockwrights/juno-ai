@@ -1,0 +1,136 @@
+[project]
+name = "juno-agent"
+version = "0.1.0"
+description = "Juno: a serverless, memory-centric personal autonomous agent on AWS, with an independent supervisor"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "clockwrights" }]
+requires-python = ">=3.12,<3.13"
+keywords = ["autonomous-agent", "llm", "aws", "aws-cdk", "serverless", "telegram"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    # Deployed from a clone (ADR-38), never installed from an index.
+    "Private :: Do Not Upload",
+]
+dependencies = [
+    "boto3>=1.35",
+    "openai>=1.60",
+    "pydantic>=2.9",
+    "jsonschema>=4.23",
+    "python-ulid>=3.0",
+    "unidiff>=0.7",
+]
+
+[project.optional-dependencies]
+infra = ["aws-cdk-lib>=2.160", "constructs>=10.3"]
+panel = ["fastapi>=0.115", "uvicorn>=0.32", "jinja2>=3.1", "python-multipart>=0.0.12"]
+sandbox = ["numpy>=2.1"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "moto[all]>=5.0",
+    "ruff>=0.7",
+    "mypy>=1.13",
+    "boto3-stubs[dynamodb,s3,sqs,ssm,lambda,events,sns,cloudformation,logs,cloudwatch]>=1.35",
+    "datamodel-code-generator>=0.26",
+    "httpx>=0.27",
+    "numpy>=2.1",
+    "aws-cdk-lib>=2.160",
+    "constructs>=10.3",
+    "fastapi>=0.115",
+    "uvicorn>=0.32",
+    "jinja2>=3.1",
+    "python-multipart>=0.0.12",
+]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["core", "agent", "gates", "supervisor", "ops"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["cdk.out", "build", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "PTH", "RUF"]
+ignore = ["A003"]
+
+# FastAPI's dependency injection is expressed as call-valued defaults. This is
+# the framework's documented idiom, not the mutable-default bug B008 exists to
+# catch, and ruff provides this setting for precisely that case.
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = [
+    "fastapi.Depends",
+    "fastapi.Form",
+    "fastapi.Query",
+    "fastapi.Path",
+    "fastapi.Header",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["E501", "SLF001"]
+"infra/tests/**" = ["E501"]
+# `type` is the parameter name in contracts/tools/memory_*.schema.json. The
+# store must match the contract; renaming it here would make the tool layer
+# translate between two names for the same thing.
+"core/storage/memory.py" = ["A002"]
+# The tool functions' parameter names are the frozen contract's property names
+# (contracts/tools/*.schema.json), and they are called with **arguments parsed
+# straight from the model. Renaming them here would mean translating between
+# two names for the same field on every call.
+"agent/tools/implementations.py" = ["A002"]
+# The decay formula is quoted from docs/04 §4 with its real notation.
+"core/storage/relevance.py" = ["RUF002"]
+# `filter` matches the VectorIndex interface in docs/04 §3, which both
+# implementations and every caller use.
+"core/storage/vectors.py" = ["A002"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+no_implicit_reexport = true
+plugins = []
+exclude = ["cdk\\.out", "build", "\\.venv"]
+
+[[tool.mypy.overrides]]
+module = ["moto.*", "unidiff.*", "jsonschema.*", "openai.*"]
+ignore_missing_imports = true
+
+# `resource` is POSIX-only and mypy runs on Windows here; the Lambda it guards
+# is Linux, and the import is inside a POSIX-only branch.
+[[tool.mypy.overrides]]
+module = "sandbox.handler"
+disable_error_code = ["attr-defined"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests", "infra/tests"]
+addopts = "-q --strict-markers"
+markers = [
+    "unit: fast tests with fakes (default)",
+    "contract: JSON Schema round-trips",
+    "integration: runs against a deployed stage",
+    "live: uses the real model, opt-in and costs money",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["core", "agent", "gates", "supervisor", "ops"]
+
+[tool.coverage.report]
+exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:", "raise NotImplementedError"]

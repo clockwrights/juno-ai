@@ -1,0 +1,15 @@
+# Directory ownership is the security boundary for self-modification
+# (docs/10). This file is the third of three enforcements, and the only one
+# the agent cannot propose a change to.
+
+/contracts/    @mariocuellar1
+/invariants/   @mariocuellar1
+/infra/        @mariocuellar1
+/gates/        @mariocuellar1
+/supervisor/   @mariocuellar1
+/scripts/      @mariocuellar1
+/ops/          @mariocuellar1
+/panel/        @mariocuellar1
+/.github/      @mariocuellar1
+/sandbox/      @mariocuellar1
+/docs/         @mariocuellar1

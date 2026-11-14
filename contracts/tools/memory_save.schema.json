@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:tools:memory_save",
+  "title": "tool memory_save",
+  "$defs": {
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "content",
+        "type",
+        "tags",
+        "importance"
+      ],
+      "properties": {
+        "content": {
+          "type": "string",
+          "maxLength": 8192
+        },
+        "type": {
+          "enum": [
+            "user_fact",
+            "user_preference",
+            "episode",
+            "agent_learning",
+            "project",
+            "pending"
+          ]
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10
+        },
+        "importance": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

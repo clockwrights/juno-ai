@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:event-detail",
+  "title": "agent-events detail envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "trace_id",
+    "stage",
+    "issued_at",
+    "detail_type",
+    "payload"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stage": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]{1,24}$"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "detail_type": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "object"
+    }
+  }
+}

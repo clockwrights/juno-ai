@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:model-response",
+  "title": "gate-model response",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "trace_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "trace_id": {
+      "type": "string"
+    },
+    "content": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reasoning_content": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tool_calls": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object"
+      }
+    },
+    "finish_reason": {
+      "enum": [
+        "stop",
+        "length",
+        "tool_calls",
+        "content_filter",
+        null
+      ]
+    },
+    "model": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "usage": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "gateway": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "model_used",
+        "tokens_remaining_today",
+        "latency_ms"
+      ],
+      "properties": {
+        "model_used": {
+          "type": "string"
+        },
+        "tokens_remaining_today": {
+          "type": "integer"
+        },
+        "latency_ms": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "error": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "message"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "budget_exhausted",
+            "role_not_allowed",
+            "upstream_error",
+            "invalid_request"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "retry_after_seconds": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

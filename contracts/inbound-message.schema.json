@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:inbound-message",
+  "title": "inbound-messages FIFO body",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "trace_id",
+    "stage",
+    "issued_at",
+    "channel",
+    "conversation_id",
+    "message_id",
+    "text",
+    "received_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stage": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]{1,24}$"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "channel": {
+      "enum": [
+        "telegram",
+        "panel"
+      ]
+    },
+    "conversation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "message_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "text": {
+      "type": "string"
+    },
+    "received_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "telegram": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "chat_id",
+        "update_id",
+        "message_id"
+      ],
+      "properties": {
+        "chat_id": {
+          "type": "string"
+        },
+        "update_id": {
+          "type": "string"
+        },
+        "message_id": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

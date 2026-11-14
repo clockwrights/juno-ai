@@ -1,0 +1,88 @@
+{
+  "comment": "Frozen map of agent_state keys. IAM LeadingKeys conditions are derived from the partition keys here; see docs/09 \u00a71.",
+  "schema_version": "1",
+  "partitions": {
+    "STATE": {
+      "sort_keys": [
+        "pause",
+        "next_wake",
+        "counters#<date>",
+        "lock#<chat_id>"
+      ],
+      "writers": {
+        "pause": [
+          "supervisor",
+          "ops-alarms",
+          "admin"
+        ],
+        "next_wake": [
+          "agent-heartbeat"
+        ],
+        "counters#<date>": [
+          "gate-model",
+          "gate-notify",
+          "gate-governor"
+        ],
+        "lock#<chat_id>": [
+          "gate-dispatcher"
+        ]
+      }
+    },
+    "PAUSE": {
+      "comment": "STATE#pause lives under its own partition so a LeadingKeys condition can deny the agent roles outright (docs/09 \u00a71).",
+      "sort_keys": [
+        "current"
+      ],
+      "writers": {
+        "current": [
+          "supervisor",
+          "ops-alarms",
+          "admin"
+        ]
+      }
+    },
+    "NOTE": {
+      "sort_keys": [
+        "<ULID>"
+      ],
+      "writers": {
+        "<ULID>": [
+          "agent-conversation",
+          "agent-heartbeat",
+          "gate-notify"
+        ]
+      }
+    },
+    "FLAG": {
+      "sort_keys": [
+        "proposals_enabled",
+        "auto_merge_prompts",
+        "web_access_enabled",
+        "heartbeat_enabled"
+      ],
+      "writers": {
+        "*": [
+          "admin"
+        ]
+      }
+    },
+    "TG_UPDATE": {
+      "comment": "Telegram dedup keys, TTL 24h.",
+      "sort_keys": [
+        "<update_id>"
+      ],
+      "writers": {
+        "<update_id>": [
+          "gate-telegram"
+        ]
+      }
+    }
+  },
+  "flag_defaults": {
+    "proposals_enabled": false,
+    "auto_merge_prompts": false,
+    "web_access_enabled": false,
+    "heartbeat_enabled": true
+  },
+  "canary_prefix": "CANARY#"
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:tools:notify_user",
+  "title": "tool notify_user",
+  "$defs": {
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "priority"
+      ],
+      "properties": {
+        "text": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "priority": {
+          "enum": [
+            "low",
+            "normal",
+            "urgent"
+          ]
+        }
+      }
+    },
+    "output": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "queued",
+            "notifications_remaining_hint"
+          ],
+          "properties": {
+            "queued": {
+              "const": true
+            },
+            "notifications_remaining_hint": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "error"
+          ],
+          "properties": {
+            "error": {
+              "const": "disabled_in_canary"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

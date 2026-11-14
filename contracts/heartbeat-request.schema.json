@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:heartbeat-request",
+  "title": "agent-heartbeat invocation request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "trace_id",
+    "stage",
+    "issued_at",
+    "mode",
+    "invocation_id",
+    "budgets",
+    "agenda"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stage": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]{1,24}$"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "mode": {
+      "enum": [
+        "free",
+        "maintenance",
+        "canary"
+      ]
+    },
+    "invocation_id": {
+      "type": "string",
+      "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "notifications_remaining",
+        "tokens_remaining_today",
+        "wall_clock_seconds"
+      ],
+      "properties": {
+        "notifications_remaining": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tokens_remaining_today": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "wall_clock_seconds": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "agenda": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "close_idle_conversations",
+          "consolidate_memory",
+          "canary_probe"
+        ]
+      }
+    }
+  }
+}

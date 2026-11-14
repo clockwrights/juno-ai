@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:executor-request",
+  "title": "sandbox-executor request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "trace_id",
+    "language",
+    "code"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "trace_id": {
+      "type": "string"
+    },
+    "language": {
+      "enum": [
+        "python"
+      ]
+    },
+    "code": {
+      "type": "string"
+    },
+    "timeout_s": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 60,
+      "default": 30
+    },
+    "stdin": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

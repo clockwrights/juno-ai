@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:tools:schedule_next_wake",
+  "title": "tool schedule_next_wake",
+  "$defs": {
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minutes",
+        "reason"
+      ],
+      "properties": {
+        "minutes": {
+          "type": "integer",
+          "minimum": 15,
+          "maximum": 1440
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recorded_minutes"
+      ],
+      "properties": {
+        "recorded_minutes": {
+          "type": "integer",
+          "minimum": 15,
+          "maximum": 1440
+        }
+      }
+    }
+  }
+}

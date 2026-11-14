@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:session-record",
+  "title": "gate-model session record (one model call)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "trace_id",
+    "stage",
+    "issued_at",
+    "seq",
+    "kind",
+    "role",
+    "model",
+    "requested_at",
+    "latency_ms",
+    "request"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stage": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]{1,24}$"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "kind": {
+      "enum": [
+        "conversation",
+        "heartbeat",
+        "consolidation",
+        "supervisor",
+        "canary"
+      ]
+    },
+    "role": {
+      "enum": [
+        "conversation",
+        "heartbeat",
+        "consolidation",
+        "supervisor",
+        "canary"
+      ]
+    },
+    "model": {
+      "type": "string"
+    },
+    "requested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "latency_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "request": {
+      "type": "object"
+    },
+    "response": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "error": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

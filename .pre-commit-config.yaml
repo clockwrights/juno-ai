@@ -1,0 +1,32 @@
+# docs/10 "Tooling". These run on `git commit`; `make ci` runs the same checks
+# plus the slower ones. Install once with `uv run pre-commit install`.
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.4
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy --strict
+        entry: uv run mypy core ops scripts infra gates sandbox agent supervisor panel
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      - id: contracts-fresh
+        name: contracts match their generators
+        entry: uv run python scripts/check_contracts_fresh.py
+        language: system
+        files: '^(contracts/|scripts/gen_).*'
+        pass_filenames: false
+
+      - id: invariants
+        name: invariant clauses are verbatim in the prompts
+        entry: uv run pytest tests/invariants_test.py -q
+        language: system
+        files: '^(invariants/|agent/prompts/)'
+        pass_filenames: false

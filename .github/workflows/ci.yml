@@ -1,0 +1,72 @@
+name: ci
+
+# Runs on every PR, human or agent-opened. docs/08 §3.2 lists what must pass;
+# docs/12 §9 lists what runs when.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10
+        with:
+          enable-cache: true
+
+      - name: Pin Python
+        run: uv python install 3.12
+
+      # Node major must match the one pinned in package.json, so a synth that
+      # passes locally passes here (docs/16 §2).
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: uv sync --locked
+      - run: npm ci
+
+      - name: Lint
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+
+      - name: Types
+        run: uv run mypy core ops scripts infra gates sandbox agent supervisor panel
+
+      - name: Contracts match their generators
+        run: uv run python scripts/check_contracts_fresh.py
+
+      - name: Unit and contract tests
+        run: uv run pytest tests -m "not integration and not live"
+
+      - name: Invariants
+        run: uv run pytest tests/invariants_test.py
+
+      - name: Synthesize both stages
+        run: |
+          npx --no-install cdk synth -c stage=dev -q
+          npx --no-install cdk synth -c stage=prod -q
+
+      - name: Infrastructure assertions
+        run: uv run pytest infra/tests
+
+      # A proposal branch may only touch paths the agent is allowed to change.
+      # This is the second of the three enforcements (docs/08 §2).
+      - name: Proposal path check
+        if: startsWith(github.head_ref, 'proposal/')
+        run: uv run python scripts/check_proposal_paths.py --base origin/main

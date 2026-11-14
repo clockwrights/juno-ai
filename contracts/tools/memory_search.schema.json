@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:tools:memory_search",
+  "title": "tool memory_search",
+  "$defs": {
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "query",
+        "type",
+        "tags",
+        "top_k"
+      ],
+      "properties": {
+        "query": {
+          "type": "string"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "user_fact",
+                "user_preference",
+                "episode",
+                "agent_learning",
+                "project",
+                "pending"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tags": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "top_k": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 20
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "results"
+      ],
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "type",
+              "content",
+              "tags",
+              "importance",
+              "created_at",
+              "last_accessed",
+              "score"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "user_fact",
+                  "user_preference",
+                  "episode",
+                  "agent_learning",
+                  "project",
+                  "pending"
+                ]
+              },
+              "content": {
+                "type": "string"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "importance": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "last_accessed": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "score": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

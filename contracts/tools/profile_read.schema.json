@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:tools:profile_read",
+  "title": "tool profile_read",
+  "$defs": {
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "content",
+        "etag"
+      ],
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "etag": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

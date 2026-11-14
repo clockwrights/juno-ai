@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# CDK
+cdk.out/
+cdk.out.*/
+cdk.context.json
+
+# Node (the CDK CLI is restored with `npm ci` from package-lock.json)
+node_modules/
+
+# Lifecycle artefacts (ADR-27) — backups contain personal data in the clear
+backups/
+exports/
+
+# Local — machine- or owner-specific, never committed (ADR-37)
+.env
+.env.*
+!.env.example
+*.local
+*.local.*
+local/
+.syncman/
+.syncman.json
+*.log
+.DS_Store
+.idea/
+.vscode/
+
+# Coding-agent instructions and settings (maintainer-local, not published)
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+
+# Maintainer-only design history: decisions, build plan, implementation guide
+internaldocs/

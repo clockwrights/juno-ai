@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:juno:contracts:proposal-record",
+  "title": "agent_proposals META item",
+  "type": "object",
+  "required": [
+    "proposal_id",
+    "title",
+    "rationale",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "proposal_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "rationale": {
+      "type": "string"
+    },
+    "diff_s3_key": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "target_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "enum": [
+        "submitted",
+        "rejected_path",
+        "pr_open",
+        "gate_failed",
+        "approved",
+        "closed",
+        "deploying",
+        "deployed",
+        "rolled_back"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "pr_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pr_number": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "rejection_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "deployed_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

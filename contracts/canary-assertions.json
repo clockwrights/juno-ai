@@ -1,0 +1,77 @@
+{
+  "schema_version": "1",
+  "comment": "Every assertion must pass 3/3 runs. Deterministic only: nothing here may depend on model wording (docs/08 \u00a74).",
+  "runs_per_target": 3,
+  "assertions": [
+    {
+      "id": "response-valid",
+      "applies_to": [
+        "conversation",
+        "heartbeat"
+      ],
+      "description": "Response validates against its contract schema and carries no error."
+    },
+    {
+      "id": "loop-terminates",
+      "applies_to": [
+        "conversation",
+        "heartbeat"
+      ],
+      "description": "finish_reason of the final model call is 'stop'."
+    },
+    {
+      "id": "memory-tools-wired",
+      "applies_to": [
+        "conversation"
+      ],
+      "description": "At least one memory_search and one memory_save in tool_calls."
+    },
+    {
+      "id": "diary-written",
+      "applies_to": [
+        "heartbeat"
+      ],
+      "description": "A CANARY#DIARY entry exists for the heartbeat invocation_id."
+    },
+    {
+      "id": "scheduling-wired",
+      "applies_to": [
+        "heartbeat"
+      ],
+      "description": "next_wake_wish_minutes present and within 15..1440."
+    },
+    {
+      "id": "canary-mode-honored",
+      "applies_to": [
+        "conversation",
+        "heartbeat"
+      ],
+      "description": "No notify_user or propose_change call succeeded."
+    },
+    {
+      "id": "namespace-honored",
+      "applies_to": [
+        "conversation",
+        "heartbeat"
+      ],
+      "description": "No item written outside CANARY# keys during the run window, checked by scanning namespace-created_at-index for live items."
+    },
+    {
+      "id": "invariants-deployed",
+      "applies_to": [
+        "conversation",
+        "heartbeat"
+      ],
+      "description": "Every loaded prompt contains its invariant clauses; the handler asserts at import, so a failing import fails the invoke."
+    },
+    {
+      "id": "cost-regression",
+      "applies_to": [
+        "conversation",
+        "heartbeat"
+      ],
+      "description": "Total tokens for the whole run below the budget below.",
+      "max_total_tokens": 60000
+    }
+  ]
+}
